@@ -1,0 +1,13 @@
+name: FlowwEssentials
+version: ${project.version}
+main: de.flowwindustries.essentials.Main
+api-version: 1.16
+prefix: FlowwEssentials
+depend: [ FlowwUtils ]
+authors: [ Kapitan_Floww ]
+description: Essential commands and features for minecraft
+
+commands:
+  gm:
+    description: Change gamemode
+    permission: floww.gm
