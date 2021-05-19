@@ -10,4 +10,13 @@ description: Essential commands and features for minecraft
 commands:
   gm:
     description: Change gamemode
-    permission: floww.gm
+  time:
+    description: Change the world time
+  day:
+    description: Make it day
+  night:
+    description: Make it night
+  setspawn:
+    description: Set the worlds spawnpoint
+  spawn:
+    description: Teleport to spawn
