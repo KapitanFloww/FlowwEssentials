@@ -1,5 +1,7 @@
 package de.flowwindustries.essentials;
 
+import de.flowwindustries.essentials.commands.fly.FlyCommand;
+import de.flowwindustries.essentials.commands.fly.SpeedCommand;
 import de.flowwindustries.essentials.commands.spawn.SetspawnCommand;
 import de.flowwindustries.essentials.commands.spawn.SpawnCommand;
 import de.flowwindustries.essentials.commands.time.DayCommand;
@@ -39,6 +41,8 @@ public final class Main extends JavaPlugin {
         getCommand("night").setExecutor(new NightCommand("night", "floww.time"));
         getCommand("setspawn").setExecutor(new SetspawnCommand(configuration, "floww.setspawn"));
         getCommand("spawn").setExecutor(new SpawnCommand(configuration, "floww.spawn"));
+        getCommand("fly").setExecutor(new FlyCommand("floww.fly"));
+        getCommand("speed").setExecutor(new SpeedCommand("floww.speed"));
 
         log.info("FlowwEssentials loaded!");
     }
