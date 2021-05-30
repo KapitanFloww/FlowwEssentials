@@ -8,7 +8,7 @@ FlowwEssentials is a minecraft plugin for spigot servers. It provides some essen
 
 **Prerequisite**: Download and install [![FlowwUtils](https://img.shields.io/badge/-FlowwUtils-informational) ](https://gitlab.com/Kapitan_Floww/flowwutils)
 
-Download the jar file and put it in your `plugins` directory.
+[Download](https://gitlab.com/Kapitan_Floww/flowwessentials/-/releases) the jar file and put it in your `plugins` directory.
 
 ## Commands:
 Either as player or console:
