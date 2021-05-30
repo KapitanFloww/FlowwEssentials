@@ -20,3 +20,7 @@ commands:
     description: Set the worlds spawnpoint
   spawn:
     description: Teleport to spawn
+  fly:
+    description: Toggle flight mode
+  speed:
+    description: Change fly speed
