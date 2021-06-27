@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/Version-0.1.1-brightgreen)](https://gitlab.com/Kapitan_Floww/flowwutils/-/releases/0.1.0)
+[![version](https://img.shields.io/badge/Version-0.2.0-brightgreen)](https://gitlab.com/Kapitan_Floww/flowwutils/-/releases/0.2.0)
 
 # FlowwEssentials
 
