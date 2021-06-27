@@ -1,7 +1,7 @@
 package de.flowwindustries.essentials.commands.spawn;
 
-import de.flowwindustries.essentials.Main;
-import de.flowwindustries.essentials.commands.AbstractCommand;
+import de.flowwindustries.essentials.EssentialsPlugin;
+import de.flowwindustries.flowwutils.commands.AbstractCommand;
 import de.flowwindustries.flowwutils.exception.InvalidArgumentsException;
 import de.flowwindustries.flowwutils.exception.PlayerNotFoundException;
 import de.flowwindustries.flowwutils.message.MessageType;
@@ -22,8 +22,8 @@ public class SetspawnCommand extends AbstractCommand {
 
     private final FileConfiguration fileConfiguration;
 
-    public SetspawnCommand(FileConfiguration fileConfiguration, String permission) {
-        super(permission);
+    public SetspawnCommand(FileConfiguration fileConfiguration, String permission, String prefix) {
+        super(permission, prefix);
         this.fileConfiguration = fileConfiguration;
     }
 
@@ -52,12 +52,12 @@ public class SetspawnCommand extends AbstractCommand {
         fileConfiguration.set("spawn.yaw", yaw);
         fileConfiguration.set("spawn.world", world.getName());
 
-        Main.getPlugin().saveConfig();
+        EssentialsPlugin.getPlugin().saveConfig();
 
         PlayerMessage.sendMessage(
                 List.of(player),
                 MessageType.SUCCESS,
-                Main.getPrefix(),
+                EssentialsPlugin.getPrefix(),
                 "Spawnpoint saved"
         );
 
@@ -91,7 +91,7 @@ public class SetspawnCommand extends AbstractCommand {
         fileConfiguration.set("spawn.yaw", yaw);
         fileConfiguration.set("spawn.world", worldName);
 
-        Main.getPlugin().saveConfig();
+        EssentialsPlugin.getPlugin().saveConfig();
         log.info("Spawnpoint saved");
 
         //Updating cache

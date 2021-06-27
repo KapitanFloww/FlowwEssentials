@@ -1,7 +1,7 @@
 package de.flowwindustries.essentials.commands.fly;
 
-import de.flowwindustries.essentials.Main;
-import de.flowwindustries.essentials.commands.AbstractCommand;
+import de.flowwindustries.essentials.EssentialsPlugin;
+import de.flowwindustries.flowwutils.commands.AbstractCommand;
 import de.flowwindustries.flowwutils.exception.InvalidArgumentsException;
 import de.flowwindustries.flowwutils.exception.PlayerNotFoundException;
 import de.flowwindustries.flowwutils.message.MessageType;
@@ -19,8 +19,8 @@ import java.util.List;
  */
 public class SpeedCommand extends AbstractCommand {
 
-    public SpeedCommand(String permission) {
-        super(permission);
+    public SpeedCommand(String permission, String prefix) {
+        super(permission, prefix);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class SpeedCommand extends AbstractCommand {
                 player.setFlySpeed(amount);
 
 
-                PlayerMessage.sendMessage(player, MessageType.SUCCESS, Main.getPrefix(), "You have set your speed to " + (amount*10) );
+                PlayerMessage.sendMessage(player, MessageType.SUCCESS, EssentialsPlugin.getPrefix(), "You have set your speed to " + (amount*10) );
                 break;
             case 2: //speed <1-10> [player]
 
@@ -41,7 +41,7 @@ public class SpeedCommand extends AbstractCommand {
 
                 targetPlayer.setFlySpeed(amount);
 
-                PlayerMessage.sendMessage(List.of(player, targetPlayer), MessageType.SUCCESS, Main.getPrefix(), "Flight speed of " + targetPlayer.getName() + " has been set to " + (amount*10) );
+                PlayerMessage.sendMessage(List.of(player, targetPlayer), MessageType.SUCCESS, EssentialsPlugin.getPrefix(), "Flight speed of " + targetPlayer.getName() + " has been set to " + (amount*10) );
                 break;
             default:
                 throw new InvalidArgumentsException();
@@ -60,7 +60,7 @@ public class SpeedCommand extends AbstractCommand {
 
         target.setFlySpeed(amount);
 
-        PlayerMessage.sendMessage(target, MessageType.SUCCESS, Main.getPrefix(), "Your flightspeed has been set to " + (amount*10));
+        PlayerMessage.sendMessage(target, MessageType.SUCCESS, EssentialsPlugin.getPrefix(), "Your flightspeed has been set to " + (amount*10));
         Bukkit.getConsoleSender().sendMessage("Flightspeed of " + target.getName() + "has been set to " + (amount*10));
     }
 

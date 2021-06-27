@@ -1,7 +1,7 @@
 package de.flowwindustries.essentials.commands.gamemode;
 
-import de.flowwindustries.essentials.Main;
-import de.flowwindustries.essentials.commands.AbstractCommand;
+import de.flowwindustries.essentials.EssentialsPlugin;
+import de.flowwindustries.flowwutils.commands.AbstractCommand;
 import de.flowwindustries.flowwutils.exception.InvalidArgumentsException;
 import de.flowwindustries.flowwutils.exception.PlayerNotFoundException;
 import de.flowwindustries.flowwutils.message.MessageType;
@@ -25,8 +25,8 @@ public class GamemodeCommand extends AbstractCommand {
 
     private static final String PERMISSION = "floww.gm";
 
-    public GamemodeCommand(String permission) {
-        super(permission);
+    public GamemodeCommand(String permission, String prefix) {
+        super(permission, prefix);
     }
 
     protected void consoleCommand(String[] args) throws InvalidArgumentsException, PlayerNotFoundException {
@@ -42,7 +42,7 @@ public class GamemodeCommand extends AbstractCommand {
         target.setGameMode(gameMode);
 
         //Send messages
-        PlayerMessage.sendMessage(List.of(target), MessageType.SUCCESS, Main.getPrefix(), "Changed gamemode to " + gameMode.name());
+        PlayerMessage.sendMessage(List.of(target), MessageType.SUCCESS, EssentialsPlugin.getPrefix(), "Changed gamemode to " + gameMode.name());
     }
 
     protected void ingameCommand(Player player, String[] args) throws InvalidArgumentsException, PlayerNotFoundException {
@@ -58,7 +58,7 @@ public class GamemodeCommand extends AbstractCommand {
             PlayerMessage.sendMessage(
                     List.of(player),
                     MessageType.SUCCESS,
-                    Main.getPrefix(),
+                    EssentialsPlugin.getPrefix(),
                     String.format("Changed gamemode to %s", gameMode.name())
             );
 
@@ -81,7 +81,7 @@ public class GamemodeCommand extends AbstractCommand {
             PlayerMessage.sendMessage(
                     sendTo,
                     MessageType.SUCCESS,
-                    Main.getPrefix(),
+                    EssentialsPlugin.getPrefix(),
                     message
             );
 

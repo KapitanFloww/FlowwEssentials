@@ -1,7 +1,7 @@
 package de.flowwindustries.essentials.commands.fly;
 
-import de.flowwindustries.essentials.Main;
-import de.flowwindustries.essentials.commands.AbstractCommand;
+import de.flowwindustries.essentials.EssentialsPlugin;
+import de.flowwindustries.flowwutils.commands.AbstractCommand;
 import de.flowwindustries.flowwutils.exception.InvalidArgumentsException;
 import de.flowwindustries.flowwutils.exception.PlayerNotFoundException;
 import de.flowwindustries.flowwutils.message.MessageType;
@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class FlyCommand extends AbstractCommand {
 
-    public FlyCommand(String permission) {
-        super(permission);
+    public FlyCommand(String permission, String prefix) {
+        super(permission, prefix);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class FlyCommand extends AbstractCommand {
                 String status = !state ? "§aenabled§e" : "§cdisabled§e";
                 player.sendMessage(
                         String.format("%s %sFlight-mode has been %s",
-                                Main.getPrefix(),
+                                EssentialsPlugin.getPrefix(),
                                 ChatColor.YELLOW,
                                 status));
                 break;
@@ -50,7 +50,7 @@ public class FlyCommand extends AbstractCommand {
                 PlayerMessage.sendMessage(
                         List.of(player, target),
                         MessageType.SUCCESS,
-                        Main.getPrefix(),
+                        EssentialsPlugin.getPrefix(),
                         targetState ? "Disabled flight mode for " + target.getName() : "Enabled flight mode for " + target.getName()
                 );
                 break;
@@ -77,10 +77,12 @@ public class FlyCommand extends AbstractCommand {
         PlayerMessage.sendMessage(
                 List.of(target),
                 MessageType.SUCCESS,
-                Main.getPrefix(),
+                EssentialsPlugin.getPrefix(),
                 message
                 );
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + message);
     }
+
+
 }

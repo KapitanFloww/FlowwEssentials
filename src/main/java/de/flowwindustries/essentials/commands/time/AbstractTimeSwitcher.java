@@ -1,8 +1,7 @@
 package de.flowwindustries.essentials.commands.time;
 
-import de.flowwindustries.essentials.Main;
-import de.flowwindustries.essentials.commands.AbstractCommand;
-import de.flowwindustries.flowwutils.exception.InsufficientPermissionException;
+import de.flowwindustries.essentials.EssentialsPlugin;
+import de.flowwindustries.flowwutils.commands.AbstractCommand;
 import de.flowwindustries.flowwutils.exception.InvalidArgumentsException;
 import de.flowwindustries.flowwutils.exception.PlayerNotFoundException;
 import de.flowwindustries.flowwutils.message.MessageType;
@@ -22,9 +21,9 @@ public abstract class AbstractTimeSwitcher extends AbstractCommand {
     private final long time;
     private final String message;
 
-    public AbstractTimeSwitcher(String configKey, String permission) {
-        super(permission);
-        FileConfiguration fileConfiguration = Main.getPlugin().getConfig();
+    public AbstractTimeSwitcher(String configKey, String permission, String prefix) {
+        super(permission, prefix);
+        FileConfiguration fileConfiguration = EssentialsPlugin.getPlugin().getConfig();
         this.time = fileConfiguration.getLong("commands.time." + configKey + ".value");
         this.message = fileConfiguration.getString("commands.time." + configKey + ".message");
     }
@@ -38,7 +37,7 @@ public abstract class AbstractTimeSwitcher extends AbstractCommand {
         PlayerMessage.sendMessage(
                 List.of(player),
                 MessageType.SUCCESS,
-                Main.getPrefix(),
+                EssentialsPlugin.getPrefix(),
                 message
         );
     }

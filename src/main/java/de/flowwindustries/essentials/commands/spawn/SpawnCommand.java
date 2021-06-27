@@ -1,7 +1,7 @@
 package de.flowwindustries.essentials.commands.spawn;
 
-import de.flowwindustries.essentials.Main;
-import de.flowwindustries.essentials.commands.AbstractCommand;
+import de.flowwindustries.essentials.EssentialsPlugin;
+import de.flowwindustries.flowwutils.commands.AbstractCommand;
 import de.flowwindustries.flowwutils.exception.InvalidArgumentsException;
 import de.flowwindustries.flowwutils.exception.PlayerNotFoundException;
 import de.flowwindustries.flowwutils.message.MessageType;
@@ -21,8 +21,8 @@ public class SpawnCommand extends AbstractCommand {
 
     private final FileConfiguration configuration;
 
-    public SpawnCommand(FileConfiguration configuration, String permission) {
-        super(permission);
+    public SpawnCommand(FileConfiguration configuration, String permission, String prefix) {
+        super(permission, prefix);
         this.configuration = configuration;
     }
 
@@ -64,7 +64,7 @@ public class SpawnCommand extends AbstractCommand {
         PlayerMessage.sendMessage(
                 List.of(player),
                 MessageType.SUCCESS,
-                Main.getPrefix(),
+                EssentialsPlugin.getPrefix(),
                 "You have been teleported to spawn"
         );
     }

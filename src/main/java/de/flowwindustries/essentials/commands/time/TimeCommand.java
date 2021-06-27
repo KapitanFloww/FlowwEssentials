@@ -1,7 +1,7 @@
 package de.flowwindustries.essentials.commands.time;
 
-import de.flowwindustries.essentials.Main;
-import de.flowwindustries.essentials.commands.AbstractCommand;
+import de.flowwindustries.essentials.EssentialsPlugin;
+import de.flowwindustries.flowwutils.commands.AbstractCommand;
 import de.flowwindustries.flowwutils.exception.InvalidArgumentsException;
 import de.flowwindustries.flowwutils.exception.PlayerNotFoundException;
 import de.flowwindustries.flowwutils.message.MessageType;
@@ -18,8 +18,8 @@ import java.util.Optional;
 @Log
 public class TimeCommand extends AbstractCommand {
 
-    public TimeCommand(String permission) {
-        super(permission);
+    public TimeCommand(String permission, String prefix) {
+        super(permission, prefix);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class TimeCommand extends AbstractCommand {
         PlayerMessage.sendMessage(
                 List.of(player),
                 MessageType.SUCCESS,
-                Main.getPrefix(),
+                EssentialsPlugin.getPrefix(),
                 "Set world time to " + timeNumber
         );
     }

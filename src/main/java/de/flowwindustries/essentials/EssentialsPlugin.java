@@ -8,19 +8,22 @@ import de.flowwindustries.essentials.commands.time.DayCommand;
 import de.flowwindustries.essentials.commands.gamemode.GamemodeCommand;
 import de.flowwindustries.essentials.commands.time.NightCommand;
 import de.flowwindustries.essentials.commands.time.TimeCommand;
+import de.flowwindustries.essentials.event.messages.PlayerConnectMessageListener;
 import lombok.Getter;
 import lombok.extern.java.Log;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Log
-public final class Main extends JavaPlugin {
+public final class EssentialsPlugin extends JavaPlugin {
 
     @Getter
     private FileConfiguration configuration = getConfig();
 
     @Getter
-    private static Main plugin;
+    private static EssentialsPlugin plugin;
 
     @Getter
     private static String prefix;
@@ -31,18 +34,10 @@ public final class Main extends JavaPlugin {
         plugin = this;
 
         setupDefaultProps();
-
         prefix = configuration.getString("plugin.prefix") +  " ";
 
-        //Register commands
-        getCommand("gm").setExecutor(new GamemodeCommand("floww.gm"));
-        getCommand("time").setExecutor(new TimeCommand("floww.time"));
-        getCommand("day").setExecutor(new DayCommand("day", "floww.time"));
-        getCommand("night").setExecutor(new NightCommand("night", "floww.time"));
-        getCommand("setspawn").setExecutor(new SetspawnCommand(configuration, "floww.setspawn"));
-        getCommand("spawn").setExecutor(new SpawnCommand(configuration, "floww.spawn"));
-        getCommand("fly").setExecutor(new FlyCommand("floww.fly"));
-        getCommand("speed").setExecutor(new SpeedCommand("floww.speed"));
+        setupCommands();
+        setupListener();
 
         log.info("FlowwEssentials loaded!");
     }
@@ -68,9 +63,28 @@ public final class Main extends JavaPlugin {
         configuration.addDefault("spawn.yaw", 0);
         configuration.addDefault("spawn.world", "world");
 
+        configuration.addDefault("messages.join", "§7Welcome player %s to FlowwIndustries");
+        configuration.addDefault("messages.leave", "§7%s has left the server");
+
         //Save configuration
         configuration.options().copyDefaults(true);
         plugin.saveConfig();
+    }
+
+    private void setupCommands() {
+        getCommand("gm").setExecutor(new GamemodeCommand("floww.gm", getPrefix()));
+        getCommand("time").setExecutor(new TimeCommand("floww.time", getPrefix()));
+        getCommand("day").setExecutor(new DayCommand("day", "floww.time", getPrefix()));
+        getCommand("night").setExecutor(new NightCommand("night", "floww.time", getPrefix()));
+        getCommand("setspawn").setExecutor(new SetspawnCommand(configuration, "floww.setspawn", getPrefix()));
+        getCommand("spawn").setExecutor(new SpawnCommand(configuration, "floww.spawn", getPrefix()));
+        getCommand("fly").setExecutor(new FlyCommand("floww.fly", getPrefix()));
+        getCommand("speed").setExecutor(new SpeedCommand("floww.speed", getPrefix()));
+    }
+
+    private void setupListener() {
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        pluginManager.registerEvents(new PlayerConnectMessageListener(configuration), this);
     }
 
 }
