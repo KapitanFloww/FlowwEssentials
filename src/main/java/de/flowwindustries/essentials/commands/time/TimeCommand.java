@@ -18,8 +18,8 @@ import java.util.Optional;
 @Log
 public class TimeCommand extends AbstractCommand {
 
-    public TimeCommand(String permission, String prefix) {
-        super(permission, prefix);
+    public TimeCommand(String permission) {
+        super(permission);
     }
 
     @Override
@@ -54,5 +54,10 @@ public class TimeCommand extends AbstractCommand {
 
         world.setTime(timeNumber);
         log.info("Set the time to " + timeNumber);
+    }
+
+    @Override
+    protected String getPrefix() {
+        return EssentialsPlugin.getPrefix();
     }
 }

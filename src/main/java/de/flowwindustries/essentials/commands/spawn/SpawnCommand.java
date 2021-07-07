@@ -21,8 +21,8 @@ public class SpawnCommand extends AbstractCommand {
 
     private final FileConfiguration configuration;
 
-    public SpawnCommand(FileConfiguration configuration, String permission, String prefix) {
-        super(permission, prefix);
+    public SpawnCommand(FileConfiguration configuration, String permission) {
+        super(permission);
         this.configuration = configuration;
     }
 
@@ -72,5 +72,11 @@ public class SpawnCommand extends AbstractCommand {
     @Override
     protected void consoleCommand(String[] args) throws PlayerNotFoundException, InvalidArgumentsException {
         log.info("Can only be used ingame!");
+    }
+
+
+    @Override
+    protected String getPrefix() {
+        return EssentialsPlugin.getPrefix();
     }
 }

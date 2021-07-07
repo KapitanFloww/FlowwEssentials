@@ -1,7 +1,7 @@
 name: FlowwEssentials
 version: ${project.version}
-main: de.flowwindustries.essentials.Main
-api-version: 1.16
+main: de.flowwindustries.essentials.EssentialsPlugin
+api-version: 1.17
 prefix: ${name}
 depend: [ FlowwUtils ]
 authors: [ Kapitan_Floww ]

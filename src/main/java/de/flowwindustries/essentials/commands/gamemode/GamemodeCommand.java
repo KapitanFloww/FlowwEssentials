@@ -25,8 +25,8 @@ public class GamemodeCommand extends AbstractCommand {
 
     private static final String PERMISSION = "floww.gm";
 
-    public GamemodeCommand(String permission, String prefix) {
-        super(permission, prefix);
+    public GamemodeCommand(String permission) {
+        super(permission);
     }
 
     protected void consoleCommand(String[] args) throws InvalidArgumentsException, PlayerNotFoundException {
@@ -104,6 +104,11 @@ public class GamemodeCommand extends AbstractCommand {
     private GameMode mapGamemodeSafe(int number) {
         return Optional.ofNullable(mapGamemode(number))
                 .orElseThrow(() -> new IllegalArgumentException("Could not map gamemode. Valid numbers are 0, 1, 2,3 "));
+    }
+
+    @Override
+    protected String getPrefix() {
+        return EssentialsPlugin.getPrefix();
     }
 
 }
