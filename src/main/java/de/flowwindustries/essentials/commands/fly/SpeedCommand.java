@@ -19,8 +19,8 @@ import java.util.List;
  */
 public class SpeedCommand extends AbstractCommand {
 
-    public SpeedCommand(String permission, String prefix) {
-        super(permission, prefix);
+    public SpeedCommand(String permission) {
+        super(permission);
     }
 
     @Override
@@ -70,5 +70,11 @@ public class SpeedCommand extends AbstractCommand {
         if(amount < 0 || amount > 1)
             throw new InvalidArgumentsException("Fly speed must be between 0 and 10");
         return amount;
+    }
+
+
+    @Override
+    protected String getPrefix() {
+        return EssentialsPlugin.getPrefix();
     }
 }

@@ -6,17 +6,17 @@
 
     <groupId>de.floww-industries</groupId>
     <artifactId>floww-essentials</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>FlowwEssentials</name>
 
     <description>Essential commands and features for minecraft</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.minecraft.version>1.16.5-R0.1-SNAPSHOT</spigot.minecraft.version>
-        <floww.utils.version>0.2.1</floww.utils.version>
+        <spigot.minecraft.version>1.17-R0.1-SNAPSHOT</spigot.minecraft.version>
+        <floww.utils.version>1.0.0</floww.utils.version>
     </properties>
 
     <build>

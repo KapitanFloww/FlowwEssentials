@@ -72,14 +72,14 @@ public final class EssentialsPlugin extends JavaPlugin {
     }
 
     private void setupCommands() {
-        getCommand("gm").setExecutor(new GamemodeCommand("floww.gm", getPrefix()));
-        getCommand("time").setExecutor(new TimeCommand("floww.time", getPrefix()));
-        getCommand("day").setExecutor(new DayCommand("day", "floww.time", getPrefix()));
-        getCommand("night").setExecutor(new NightCommand("night", "floww.time", getPrefix()));
-        getCommand("setspawn").setExecutor(new SetspawnCommand(configuration, "floww.setspawn", getPrefix()));
-        getCommand("spawn").setExecutor(new SpawnCommand(configuration, "floww.spawn", getPrefix()));
-        getCommand("fly").setExecutor(new FlyCommand("floww.fly", getPrefix()));
-        getCommand("speed").setExecutor(new SpeedCommand("floww.speed", getPrefix()));
+        getCommand("gm").setExecutor(new GamemodeCommand("floww.gm"));
+        getCommand("time").setExecutor(new TimeCommand("floww.time"));
+        getCommand("day").setExecutor(new DayCommand("day", "floww.time"));
+        getCommand("night").setExecutor(new NightCommand("night", "floww.time"));
+        getCommand("setspawn").setExecutor(new SetspawnCommand(configuration, "floww.setspawn"));
+        getCommand("spawn").setExecutor(new SpawnCommand(configuration, "floww.spawn"));
+        getCommand("fly").setExecutor(new FlyCommand("floww.fly"));
+        getCommand("speed").setExecutor(new SpeedCommand("floww.speed"));
     }
 
     private void setupListener() {

@@ -22,8 +22,8 @@ public class SetspawnCommand extends AbstractCommand {
 
     private final FileConfiguration fileConfiguration;
 
-    public SetspawnCommand(FileConfiguration fileConfiguration, String permission, String prefix) {
-        super(permission, prefix);
+    public SetspawnCommand(FileConfiguration fileConfiguration, String permission) {
+        super(permission);
         this.fileConfiguration = fileConfiguration;
     }
 
@@ -97,5 +97,10 @@ public class SetspawnCommand extends AbstractCommand {
         //Updating cache
         SpawnCache.setSpawnLocation(new Location(Bukkit.getWorld(worldName), x, y, z));
         log.info("Setting spawn cache");
+    }
+
+    @Override
+    protected String getPrefix() {
+        return EssentialsPlugin.getPrefix();
     }
 }

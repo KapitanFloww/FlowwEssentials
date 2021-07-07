@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class FlyCommand extends AbstractCommand {
 
-    public FlyCommand(String permission, String prefix) {
-        super(permission, prefix);
+    public FlyCommand(String permission) {
+        super(permission);
     }
 
     @Override
@@ -82,6 +82,11 @@ public class FlyCommand extends AbstractCommand {
                 );
 
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + message);
+    }
+
+    @Override
+    protected String getPrefix() {
+        return EssentialsPlugin.getPrefix();
     }
 
 

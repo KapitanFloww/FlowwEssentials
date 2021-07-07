@@ -21,8 +21,8 @@ public abstract class AbstractTimeSwitcher extends AbstractCommand {
     private final long time;
     private final String message;
 
-    public AbstractTimeSwitcher(String configKey, String permission, String prefix) {
-        super(permission, prefix);
+    public AbstractTimeSwitcher(String configKey, String permission) {
+        super(permission);
         FileConfiguration fileConfiguration = EssentialsPlugin.getPlugin().getConfig();
         this.time = fileConfiguration.getLong("commands.time." + configKey + ".value");
         this.message = fileConfiguration.getString("commands.time." + configKey + ".message");
