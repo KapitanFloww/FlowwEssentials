@@ -36,8 +36,7 @@ public class FlyCommand extends AbstractCommand {
                     player.setAllowFlight(!state);
                     player.setFlying(!state);
 
-                    String successNoArg = !state ? ENABLED_FLIGHT : DISABLED_FLIGHT;
-                    PlayerMessage.success(successNoArg, player);
+                    PlayerMessage.success(getSuccessNoArg(state), player);
                 }
                 case 1 -> {
                     Player target = SpigotStringParser.parsePlayerSafe(args[0]);
@@ -45,11 +44,10 @@ public class FlyCommand extends AbstractCommand {
                     target.setAllowFlight(!targetState);
                     target.setFlying(!targetState);
 
-                    String successOneArg = getTargetMsg(targetState, target.getName());
                     if(player == target) {
-                        PlayerMessage.success(ENABLED_FLIGHT, player);
+                        PlayerMessage.success(getSuccessNoArg(targetState), player);
                     } else {
-                        PlayerMessage.success(successOneArg, player, target);
+                        PlayerMessage.success(getTargetMsg(targetState, target.getName()), player, target);
                     }
                 }
                 default -> throw new IllegalArgumentException(INVALID_ARGUMENTS);
@@ -82,6 +80,10 @@ public class FlyCommand extends AbstractCommand {
             log.warning(PREFIX + ex.getMessage());
         }
         return false;
+    }
+
+    private String getSuccessNoArg(boolean state) {
+        return !state ? ENABLED_FLIGHT : DISABLED_FLIGHT;
     }
 
     private String getTargetMsg(boolean state, String targetName) {
