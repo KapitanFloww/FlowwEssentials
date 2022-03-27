@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/Version-1.0.0-brightgreen)](https://gitlab.com/Kapitan_Floww/flowwessentials/-/releases/1.0.0)
+[![version](https://img.shields.io/badge/Version-2.0.0-brightgreen)](https://gitlab.com/Kapitan_Floww/flowwessentials/-/releases/1.0.0)
 
 # FlowwEssentials
 
@@ -6,12 +6,12 @@ FlowwEssentials is a minecraft plugin for spigot servers. It provides some essen
 
 ## Installation
 
-**Prerequisite**: Download and install [![FlowwUtils](https://img.shields.io/badge/-FlowwUtils-informational) ](https://gitlab.com/Kapitan_Floww/flowwutils)
+Needs Java 17 installed.
 
-[Download](https://gitlab.com/Kapitan_Floww/flowwessentials/-/releases) the jar file and put it in your `plugins` directory.
+Download the jar file and put it in your `plugins` directory.
+Start the server once and quit. Edit the config.yml to your liking.
 
 ## Commands:
-Either as player or console:
 ```bash
 - /fly [player] : Toggle flight-mode of yourself or another player
 - Permission: floww.fly

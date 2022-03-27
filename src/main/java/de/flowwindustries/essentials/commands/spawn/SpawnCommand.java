@@ -1,82 +1,73 @@
 package de.flowwindustries.essentials.commands.spawn;
 
 import de.flowwindustries.essentials.EssentialsPlugin;
-import de.flowwindustries.flowwutils.commands.AbstractCommand;
-import de.flowwindustries.flowwutils.exception.InvalidArgumentsException;
-import de.flowwindustries.flowwutils.exception.PlayerNotFoundException;
-import de.flowwindustries.flowwutils.message.MessageType;
-import de.flowwindustries.flowwutils.message.PlayerMessage;
+import de.flowwindustries.essentials.commands.AbstractCommand;
+import de.flowwindustries.essentials.utils.messages.PlayerMessage;
+import de.flowwindustries.essentials.utils.parsing.SpigotStringParser;
 import lombok.extern.java.Log;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.Optional;
+import static de.flowwindustries.essentials.EssentialsPlugin.PREFIX;
+
+/**
+ * Spawn command.
+ * <ul>
+ *     <li>Usage: /spawn]</li>
+ *     <li>Permission: floww.spawn</li>
+ * </ul>
+ */
 
 @Log
 public class SpawnCommand extends AbstractCommand {
 
+    private static final String TELEPORT_SUCCESS = "You have been teleported to spawn";
+
     private final FileConfiguration configuration;
 
-    public SpawnCommand(FileConfiguration configuration, String permission) {
+    public SpawnCommand(String permission) {
         super(permission);
-        this.configuration = configuration;
+        this.configuration = EssentialsPlugin.getPluginInstance().getConfiguration();
     }
 
     @Override
-    protected void ingameCommand(Player player, String[] args) throws PlayerNotFoundException, InvalidArgumentsException {
-        if(args.length != 0)
-            throw new InvalidArgumentsException("Too many arguments");
+    protected boolean playerCommand(Player player, String[] args) {
+        try {
+            if(args.length != 0) {
+                throw new IllegalArgumentException(INVALID_ARGUMENTS);
+            }
 
-        Location spawnLocation = null;
+            Location spawnLocation = SetSpawnCommand.getSpawnCache();
+            if(spawnLocation == null) { //SpawnCache not set
+                log.config(PREFIX + "Loading spawn from config");
+                String worldString = configuration.getString("spawn.world");
+                World world = SpigotStringParser.parseWorldSafe(worldString);
+                double x = configuration.getDouble("spawn.x");
+                double y = configuration.getDouble("spawn.y");
+                double z = configuration.getDouble("spawn.z");
+                float yaw = (float) configuration.getDouble("spawn.yaw");
+                float pitch = (float) configuration.getDouble("spawn.pitch");
 
-        if(SpawnCache.getSpawnLocation() == null) { //SpawnCache not set
-            String worldString = Optional.ofNullable(configuration.getString("spawn.world"))
-                    .orElseThrow(() -> new IllegalStateException("World config key not found"));
+                spawnLocation = new Location(world, x, y, z, yaw, pitch);
+                //Set the cache
+                SetSpawnCommand.setSpawnCache(spawnLocation);
+            }
 
-            World world = Optional.ofNullable(Bukkit.getWorld(worldString))
-                    .orElseThrow(() -> new IllegalStateException("World not found"));
+            player.teleport(spawnLocation);
+            PlayerMessage.success(TELEPORT_SUCCESS, player);
+            return true;
 
-            float yaw = (float) configuration.getDouble("spawn.yaw");
-            float pitch = (float) configuration.getDouble("spawn.pitch");
-
-            spawnLocation = new Location(
-                    world,
-                    configuration.getDouble("spawn.x"),
-                    configuration.getDouble("spawn.y"),
-                    configuration.getDouble("spawn.z"),
-                    yaw,
-                    pitch
-            );
-
-            //Set the cache
-            SpawnCache.setSpawnLocation(spawnLocation);
-            log.info("Setting spawn cache");
-        } else { //SpawnCache set
-            //Get the cache
-            spawnLocation = SpawnCache.getSpawnLocation();
-            log.info("Loading spawn cache");
+        } catch (IllegalArgumentException ex) {
+            PlayerMessage.warn(ex.getMessage(), player);
         }
-        player.teleport(spawnLocation);
-        PlayerMessage.sendMessage(
-                List.of(player),
-                MessageType.SUCCESS,
-                EssentialsPlugin.getPrefix(),
-                "You have been teleported to spawn"
-        );
+        return false;
     }
 
     @Override
-    protected void consoleCommand(String[] args) throws PlayerNotFoundException, InvalidArgumentsException {
-        log.info("Can only be used ingame!");
-    }
-
-
-    @Override
-    protected String getPrefix() {
-        return EssentialsPlugin.getPrefix();
+    protected boolean consoleCommand(String[] args) {
+        log.warning(PREFIX + "Can only be used by players");
+        return false;
     }
 }

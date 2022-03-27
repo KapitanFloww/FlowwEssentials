@@ -1,9 +1,8 @@
-name: FlowwEssentials
+name: ${project.name}
 version: ${project.version}
 main: de.flowwindustries.essentials.EssentialsPlugin
-api-version: 1.17
+api-version: 1.18
 prefix: ${name}
-depend: [ FlowwUtils ]
 authors: [ Kapitan_Floww ]
 description: Essential commands and features for minecraft
 

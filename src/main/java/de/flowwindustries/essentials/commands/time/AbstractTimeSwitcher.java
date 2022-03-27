@@ -1,20 +1,19 @@
 package de.flowwindustries.essentials.commands.time;
 
 import de.flowwindustries.essentials.EssentialsPlugin;
-import de.flowwindustries.flowwutils.commands.AbstractCommand;
-import de.flowwindustries.flowwutils.exception.InvalidArgumentsException;
-import de.flowwindustries.flowwutils.exception.PlayerNotFoundException;
-import de.flowwindustries.flowwutils.message.MessageType;
-import de.flowwindustries.flowwutils.message.PlayerMessage;
+import de.flowwindustries.essentials.commands.AbstractCommand;
+import de.flowwindustries.essentials.utils.messages.PlayerMessage;
+import de.flowwindustries.essentials.utils.parsing.SpigotStringParser;
 import lombok.extern.java.Log;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.Optional;
+import static de.flowwindustries.essentials.EssentialsPlugin.PREFIX;
 
+/**
+ * Parental command class for /day and /night commands.
+ */
 @Log
 public abstract class AbstractTimeSwitcher extends AbstractCommand {
 
@@ -23,36 +22,38 @@ public abstract class AbstractTimeSwitcher extends AbstractCommand {
 
     public AbstractTimeSwitcher(String configKey, String permission) {
         super(permission);
-        FileConfiguration fileConfiguration = EssentialsPlugin.getPlugin().getConfig();
+        FileConfiguration fileConfiguration = EssentialsPlugin.getPluginInstance().getConfig();
         this.time = fileConfiguration.getLong("commands.time." + configKey + ".value");
         this.message = fileConfiguration.getString("commands.time." + configKey + ".message");
     }
 
     @Override
-    protected void ingameCommand(Player player, String[] args) throws PlayerNotFoundException, InvalidArgumentsException {
-        if(args.length > 0) {
-            throw new InvalidArgumentsException("Too many arguments");
+    protected boolean playerCommand(Player player, String[] args) {
+        try {
+            if(args.length > 0) {
+                throw new IllegalArgumentException(INVALID_ARGUMENTS);
+            }
+            player.getWorld().setTime(time);
+            PlayerMessage.success(message, player);
+        } catch (IllegalArgumentException ex) {
+            PlayerMessage.warn(ex.getMessage(), player);
         }
-        player.getWorld().setTime(time);
-        PlayerMessage.sendMessage(
-                List.of(player),
-                MessageType.SUCCESS,
-                EssentialsPlugin.getPrefix(),
-                message
-        );
+        return false;
     }
 
     @Override
-    protected void consoleCommand(String[] args) throws PlayerNotFoundException, InvalidArgumentsException {
-        if(args.length != 1) {
-            throw new InvalidArgumentsException("Invalid amounts of arguments");
+    protected boolean consoleCommand(String[] args) {
+        try {
+            if(args.length != 1) {
+                throw new IllegalArgumentException(INVALID_ARGUMENTS);
+            }
+            World world = SpigotStringParser.parseWorldSafe(args[0]);
+            world.setTime(time);
+
+            log.info(PREFIX + message);
+        } catch (IllegalArgumentException ex) {
+            log.warning(PREFIX + ex.getMessage());
         }
-
-        String worldString = args[0];
-        World world = Optional.ofNullable(Bukkit.getWorld(worldString))
-                .orElseThrow(() -> new InvalidArgumentsException("World not found"));
-
-        world.setTime(time);
-        log.info(message);
+        return false;
     }
 }

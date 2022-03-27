@@ -2,12 +2,13 @@ package de.flowwindustries.essentials;
 
 import de.flowwindustries.essentials.commands.fly.FlyCommand;
 import de.flowwindustries.essentials.commands.fly.SpeedCommand;
-import de.flowwindustries.essentials.commands.spawn.SetspawnCommand;
+import de.flowwindustries.essentials.commands.gamemode.GamemodeCommand;
+import de.flowwindustries.essentials.commands.spawn.SetSpawnCommand;
 import de.flowwindustries.essentials.commands.spawn.SpawnCommand;
 import de.flowwindustries.essentials.commands.time.DayCommand;
-import de.flowwindustries.essentials.commands.gamemode.GamemodeCommand;
 import de.flowwindustries.essentials.commands.time.NightCommand;
 import de.flowwindustries.essentials.commands.time.TimeCommand;
+import de.flowwindustries.essentials.configuration.DefaultConfiguration;
 import de.flowwindustries.essentials.event.messages.PlayerConnectMessageListener;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -16,59 +17,53 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Plugin Main class.
+ */
 @Log
 public final class EssentialsPlugin extends JavaPlugin {
 
+    /**
+     * Singleton plugin instance.
+     */
     @Getter
-    private FileConfiguration configuration = getConfig();
+    private static EssentialsPlugin pluginInstance;
 
     @Getter
-    private static EssentialsPlugin plugin;
+    private FileConfiguration configuration;
+    
+    public static final String PREFIX = "§7[§aFloww§4Essentials§7] ";
 
-    @Getter
-    private static String prefix;
-
+    /**
+     * Startup logic.
+     */
     @Override
     public void onEnable() {
         // Plugin startup logic
-        plugin = this;
+        pluginInstance = this;
+        String pluginVersion = pluginInstance.getDescription().getVersion();
 
-        setupDefaultProps();
-        prefix = configuration.getString("plugin.prefix") +  " ";
-
+        setupConfig();
         setupCommands();
         setupListener();
 
-        log.info("FlowwEssentials loaded!");
+        log.info(PREFIX + "Initialization complete. Running version: " + pluginVersion);
     }
 
+    /**
+     * Shutdown logic.
+     */
     @Override
     public void onDisable() {
-        log.info("Shutting down...");
+        this.configuration = null;
+        pluginInstance = null;
+        log.info(PREFIX + "Shutdown complete.");
     }
 
-    private void setupDefaultProps() {
-        //Setup values
-        configuration.addDefault("plugin.prefix", "§7[§4Floww§aEssentials§7]");
-
-        configuration.addDefault("commands.time.day.value", 6000L);
-        configuration.addDefault("commands.time.night.value", 15000L);
-        configuration.addDefault("commands.time.day.message", "Let there be light!");
-        configuration.addDefault("commands.time.night.message", "Darkness rises!");
-
-        configuration.addDefault("spawn.x", 0);
-        configuration.addDefault("spawn.y", 100);
-        configuration.addDefault("spawn.z", 0);
-        configuration.addDefault("spawn.pitch", 0);
-        configuration.addDefault("spawn.yaw", 0);
-        configuration.addDefault("spawn.world", "world");
-
-        configuration.addDefault("messages.join", "§7Welcome player %s to FlowwIndustries");
-        configuration.addDefault("messages.leave", "§7%s has left the server");
-
-        //Save configuration
-        configuration.options().copyDefaults(true);
-        plugin.saveConfig();
+    private void setupConfig() {
+        this.configuration = getConfig();
+        DefaultConfiguration.setupDefaultConfiguration(configuration);
+        pluginInstance.saveConfig();
     }
 
     private void setupCommands() {
@@ -76,15 +71,14 @@ public final class EssentialsPlugin extends JavaPlugin {
         getCommand("time").setExecutor(new TimeCommand("floww.time"));
         getCommand("day").setExecutor(new DayCommand("day", "floww.time"));
         getCommand("night").setExecutor(new NightCommand("night", "floww.time"));
-        getCommand("setspawn").setExecutor(new SetspawnCommand(configuration, "floww.setspawn"));
-        getCommand("spawn").setExecutor(new SpawnCommand(configuration, "floww.spawn"));
+        getCommand("setspawn").setExecutor(new SetSpawnCommand("floww.setspawn"));
+        getCommand("spawn").setExecutor(new SpawnCommand("floww.spawn"));
         getCommand("fly").setExecutor(new FlyCommand("floww.fly"));
         getCommand("speed").setExecutor(new SpeedCommand("floww.speed"));
     }
 
     private void setupListener() {
         PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new PlayerConnectMessageListener(configuration), this);
+        pluginManager.registerEvents(new PlayerConnectMessageListener(), this);
     }
-
 }
