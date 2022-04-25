@@ -1,5 +1,5 @@
-[![version](https://img.shields.io/badge/Version-2.0.0-brightgreen)](https://gitlab.com/Kapitan_Floww/flowwessentials/-/releases/1.0.0)
-![Spigot 1.18.1](https://img.shields.io/badge/Spigot-1.18.1-yellow)
+[![version](https://img.shields.io/badge/Version-2.1.0-brightgreen)](https://gitlab.com/Kapitan_Floww/flowwessentials/-/releases/1.0.0)
+![Spigot 1.18.2](https://img.shields.io/badge/Spigot-1.18.2-yellow)
 
 # FlowwEssentials
 
