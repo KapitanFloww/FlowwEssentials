@@ -1,5 +1,6 @@
 package de.flowwindustries.essentials;
 
+import de.flowwindustries.essentials.commands.smoke.SmokeCommand;
 import de.flowwindustries.essentials.commands.fly.FlyCommand;
 import de.flowwindustries.essentials.commands.fly.SpeedCommand;
 import de.flowwindustries.essentials.commands.gamemode.GamemodeCommand;
@@ -75,6 +76,7 @@ public final class EssentialsPlugin extends JavaPlugin {
         getCommand("spawn").setExecutor(new SpawnCommand("floww.spawn"));
         getCommand("fly").setExecutor(new FlyCommand("floww.fly"));
         getCommand("speed").setExecutor(new SpeedCommand("floww.speed"));
+        getCommand("smoke").setExecutor(new SmokeCommand("floww.smoke"));
     }
 
     private void setupListener() {
