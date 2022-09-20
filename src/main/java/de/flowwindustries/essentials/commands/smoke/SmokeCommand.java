@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,6 +24,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * Smoke Command to create small smokers.
+ * /smoke - create new smoke
+ * /smoke save - save all smokes
+ * /smoke load - load all saved smokes
+ * /smoke list - list all smokes
+ * /smoke remove (id/all) - remove smoke with id or all smokes
+ */
 @Log
 public class SmokeCommand extends AbstractCommand {
 
@@ -106,16 +115,17 @@ public class SmokeCommand extends AbstractCommand {
                 executeSmokeCreation(player);
             }
             case 1 -> {
-                if(args[0].equalsIgnoreCase("list")) {
-                    executeListAll(player);
-                }
-                else if(args[0].equalsIgnoreCase("save")) {
-                    SmokeCommand.persistLocations();
-                    PlayerMessage.success("Saved locations", player);
-                }
-                else if(args[0].equalsIgnoreCase("load")) {
-                    SmokeCommand.initializeLocations();
-                    PlayerMessage.success("Initialized locations", player);
+                switch (args[0].toLowerCase(Locale.getDefault())) {
+                    case "help" -> executeHelp(player);
+                    case "list" -> executeListAll(player);
+                    case "save" -> {
+                        SmokeCommand.persistLocations();
+                        PlayerMessage.success("Saved locations", player);
+                    }
+                    case "load" -> {
+                        SmokeCommand.initializeLocations();
+                        PlayerMessage.success("Initialized locations", player);
+                    }
                 }
             }
             case 2 -> {
@@ -132,6 +142,15 @@ public class SmokeCommand extends AbstractCommand {
             default -> throw new IllegalArgumentException(INVALID_ARGUMENTS);
         }
         return false;
+    }
+
+    private void executeHelp(Player player) {
+        PlayerMessage.info("-- Smoke Help --", player);
+        PlayerMessage.info("/smoke - create new smoke", player);
+        PlayerMessage.info("/smoke save - save all smokes", player);
+        PlayerMessage.info("/smoke load - load all saved smokes", player);
+        PlayerMessage.info("/smoke list - list all smokes", player);
+        PlayerMessage.info("/smoke remove (id/all) - remove smoke with id or all smokes", player);
     }
 
     @Override
