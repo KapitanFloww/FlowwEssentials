@@ -56,6 +56,10 @@ public final class EssentialsPlugin extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+
+        // Persist Smoke Locations
+        SmokeCommand.persistLocations();
+
         this.configuration = null;
         pluginInstance = null;
         log.info(PREFIX + "Shutdown complete.");

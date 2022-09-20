@@ -2,24 +2,102 @@ package de.flowwindustries.essentials.commands.smoke;
 
 import de.flowwindustries.essentials.EssentialsPlugin;
 import de.flowwindustries.essentials.commands.AbstractCommand;
+import de.flowwindustries.essentials.utils.messages.PlayerMessage;
+import lombok.extern.java.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
+@Log
 public class SmokeCommand extends AbstractCommand {
 
     public SmokeCommand(String permission) {
         super(permission);
     }
 
-    private static final List<Integer> runningTasks = new ArrayList<>();
+    private static final Path LOCATIONS_DATA_FILE = Path.of("plugins", "FlowwEssentials","data", "smoke-locations.dat");
     private static final Random random = new Random();
+
+    private static int counter;
+
+    private static Map<Integer, Location> smokeLocations; // TODO cluster locations to chunk and check chunk for once
+
+    static {
+        initializeLocations();
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(EssentialsPlugin.getPluginInstance(),
+                () -> smokeLocations.values().forEach(smokeLocation -> {
+                    if(!smokeLocation.getChunk().isEntitiesLoaded()) {
+                        return;
+                    }
+                    // TODO work with noise map
+                    if(random.nextInt(50) % 3 == 0) {
+                        return;
+                    }
+                    // TODO custom intensity
+                    if(!(random.nextInt(50) % 3 == 0)) {
+                        smokeLocation.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, smokeLocation, 0, 1, 10.0d, 0.0d, 0.01d);
+                        return;
+                    }
+                    if(!(random.nextInt(50) % 2 == 0)) {
+                        smokeLocation.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, smokeLocation, 0, 0.0d, 10.0d, 0.5d, 0.01d);
+                        return;
+                    }
+                    if(!(random.nextInt(50) % 4 == 0)) {
+                        smokeLocation.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, smokeLocation, 0, -0.4d, 10.0d, -1, 0.01d);
+                    }
+                }), 0l, 7l);
+    }
+
+    private static void initializeLocations() {
+        try {
+            if(!LOCATIONS_DATA_FILE.toFile().exists()) {
+                smokeLocations = new ConcurrentHashMap<>();
+            }
+            BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(LOCATIONS_DATA_FILE.toFile())));
+            smokeLocations = (Map<Integer, Location>) in.readObject();
+            setCounter();
+        } catch (IOException | ClassNotFoundException ex) {
+            log.warning("Could not initialize smoke locations: " + ex.getMessage());
+        }
+    }
+
+    private static void setCounter() {
+        AtomicInteger temp = new AtomicInteger(0);
+        smokeLocations.keySet().forEach(integer -> {
+            if(integer > temp.get()) {
+                temp.set(integer);
+            }
+        });
+        counter = temp.get() + 1;
+    }
+
+    public static void persistLocations() {
+        try {
+            if(!LOCATIONS_DATA_FILE.toFile().exists()) {
+                LOCATIONS_DATA_FILE.toFile().createNewFile();
+            }
+            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(LOCATIONS_DATA_FILE.toFile())));
+            out.writeObject(smokeLocations);
+            out.close();
+        } catch (IOException ex) {
+            log.warning("Could not persist file: " + ex.getMessage());
+        }
+    }
 
     @Override
     protected boolean playerCommand(Player player, String[] args) {
@@ -29,9 +107,15 @@ public class SmokeCommand extends AbstractCommand {
             }
             case 1 -> {
                 if(args[0].equalsIgnoreCase("list")) {
-                    runningTasks.forEach(taskId -> {
-                        player.sendMessage("Task: %s".formatted(taskId));
-                    });
+                    executeListAll(player);
+                }
+                else if(args[0].equalsIgnoreCase("save")) {
+                    SmokeCommand.persistLocations();
+                    PlayerMessage.success("Saved locations", player);
+                }
+                else if(args[0].equalsIgnoreCase("load")) {
+                    SmokeCommand.initializeLocations();
+                    PlayerMessage.success("Initialized locations", player);
                 }
             }
             case 2 -> {
@@ -52,24 +136,26 @@ public class SmokeCommand extends AbstractCommand {
 
     @Override
     protected boolean consoleCommand(String[] args) {
-        Bukkit.getConsoleSender().sendMessage("Must be used in-game");
+        Bukkit.getConsoleSender().sendMessage("Can only be used in-game");
         return false;
     }
 
-    private static void executeRemoveAll(Player player) {
-        List<Integer> taskIds = new ArrayList<>(runningTasks);
-        taskIds.forEach(taskId -> executeRemoveSmoke(player, taskId));
+    private static void executeListAll(Player player) {
+        smokeLocations.forEach((taskId, location) -> PlayerMessage.info("Id: %s, Location: %s".formatted(taskId, location), player));
     }
 
-    private static void executeRemoveSmoke(Player player, int id) {
-        Integer taskId = id;
-        if(runningTasks.contains(taskId)) {
-            Bukkit.getScheduler().cancelTask(taskId);
-            player.sendMessage("Removed effect");
-            runningTasks.remove(taskId);
+    private static void executeRemoveAll(Player player) {
+        smokeLocations.clear();
+        PlayerMessage.info("Cleared all locations", player);
+    }
+
+    private static void executeRemoveSmoke(Player player, Integer id) {
+        if(smokeLocations.containsKey(id)) {
+            PlayerMessage.info("Removed location: %s".formatted(id), player);
+            smokeLocations.remove(id);
             return;
         }
-        player.sendMessage("Could not find task %s".formatted(id));
+        PlayerMessage.warn("Could not find task: %s".formatted(id), player);
     }
 
     private static void executeSmokeCreation(Player player) {
@@ -84,16 +170,8 @@ public class SmokeCommand extends AbstractCommand {
         if(targetLocation.getWorld() == null) {
             throw new IllegalStateException("World must not be null");
         }
-        Integer taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(EssentialsPlugin.getPluginInstance(),
-                () -> {
-                    if(random.nextInt(50) % 3 == 0) {
-                        return;
-                    }
-                    targetLocation.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, targetLocation, 0, 1, 10.0d, 0.0d, 0.01d);
-                    targetLocation.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, targetLocation, 0, 0.0d, 10.0d, 0.5d, 0.01d);
-                    targetLocation.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, targetLocation, 0, -0.4d, 10.0d, -1, 0.01d);
-                }, 0l, 7l);
-        runningTasks.add(taskId);
-        player.sendMessage("Placed smoke at %s, %s, %s (taskId: %s)".formatted(targetLocation.getBlock().getX(), targetLocation.getBlock().getY(), targetLocation.getBlock().getZ(), taskId));
+        int id = counter++;
+        smokeLocations.put(id, targetLocation);
+        PlayerMessage.success("Placed smoke at %s, %s, %s (taskId: %s)".formatted(targetLocation.getBlock().getX(), targetLocation.getBlock().getY(), targetLocation.getBlock().getZ(), id), player);
     }
 }
