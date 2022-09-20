@@ -39,7 +39,7 @@ public class SmokeCommand extends AbstractCommand {
         super(permission);
     }
 
-    private static final Path LOCATIONS_DATA_FILE = Path.of("plugins", "FlowwEssentials","data", "smoke-locations.dat");
+    private static final Path LOCATIONS_DATA_FILE = Path.of("plugins", "FlowwEssentials", "smoke-locations.dat");
     private static final Random random = new Random();
 
     private static int counter;
