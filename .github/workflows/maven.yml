@@ -29,10 +29,9 @@ jobs:
         - name: Build Maven Project
           run: |
             mvn -B package --file pom.xml
-            mkdir staging && cp target/*.jar staging
+            mkdir staging && cp target/floww-essentials-*.jar staging
 
         - name: Persist Artifact
           uses: actions/upload-artifact@v3
           with:
-            name: github-actions-artifact
             path: staging
