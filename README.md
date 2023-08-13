@@ -1,5 +1,5 @@
-[![version](https://img.shields.io/badge/Version-2.2.0-brightgreen)]()
-![Spigot 1.19](https://img.shields.io/badge/Spigot-1.19-yellow)
+[![version](https://img.shields.io/badge/Version-2.3.0-brightgreen)]()
+![Spigot 1.19](https://img.shields.io/badge/Spigot-1.20.1-yellow)
 
 # FlowwEssentials
 

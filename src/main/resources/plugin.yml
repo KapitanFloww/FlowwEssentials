@@ -1,7 +1,7 @@
 name: ${project.name}
 version: ${project.version}
 main: de.flowwindustries.essentials.EssentialsPlugin
-api-version: 1.19
+api-version: 1.20
 prefix: ${name}
 authors: [ Kapitan_Floww ]
 description: Essential commands and features for minecraft
