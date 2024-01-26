@@ -23,5 +23,3 @@ commands:
     description: Toggle flight mode
   speed:
     description: Change fly speed
-  smoke:
-    description: Place smoke particle
