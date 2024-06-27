@@ -23,3 +23,5 @@ commands:
     description: Toggle flight mode
   speed:
     description: Change fly speed
+  ping:
+    description: Check your current ping

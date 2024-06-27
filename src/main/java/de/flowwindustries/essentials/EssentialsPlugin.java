@@ -3,6 +3,7 @@ package de.flowwindustries.essentials;
 import de.flowwindustries.essentials.commands.fly.FlyCommand;
 import de.flowwindustries.essentials.commands.fly.SpeedCommand;
 import de.flowwindustries.essentials.commands.gamemode.GamemodeCommand;
+import de.flowwindustries.essentials.commands.ping.PingCommand;
 import de.flowwindustries.essentials.commands.spawn.SetSpawnCommand;
 import de.flowwindustries.essentials.commands.spawn.SpawnCommand;
 import de.flowwindustries.essentials.commands.time.DayCommand;
@@ -76,6 +77,7 @@ public final class EssentialsPlugin extends JavaPlugin {
         getCommand("spawn").setExecutor(new SpawnCommand("floww.spawn"));
         getCommand("fly").setExecutor(new FlyCommand("floww.fly"));
         getCommand("speed").setExecutor(new SpeedCommand("floww.speed"));
+        getCommand("ping").setExecutor(new PingCommand("floww.ping"));
     }
 
     private void setupListener() {
